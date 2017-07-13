@@ -14,17 +14,17 @@ import java.util.AbstractList;
 public class Tuple extends AbstractList<Object> implements ErlangObject {
 
     private final Object[] data;
-    
+
     /**
      * Creates a tuple with the provided objects.
-     * 
+     *
      * @param data The data.
      * @return The tuple containing the data.
      */
     public static Tuple of(Object... data) {
         return new Tuple(data);
     }
-    
+
     public Tuple(Object[] data) {
         this.data = data;
     }
@@ -124,7 +124,8 @@ public class Tuple extends AbstractList<Object> implements ErlangObject {
      * @param index The object's index.
      * @return The object.
      */
-    public void getNil(int index) {}
+    public void getNil(int index) {
+    }
 
     /**
      * Gets the specified object as a string.
@@ -133,7 +134,13 @@ public class Tuple extends AbstractList<Object> implements ErlangObject {
      * @return The object.
      */
     public String getString(int index) {
-        return (String) data[index];
+        Object res = data[index];
+        if (res instanceof String) {
+            return (String) data[index];
+        } else if (res instanceof byte[]) {
+            return new String((byte[]) res);
+        }
+        throw new IllegalArgumentException("No String found.");
     }
 
     /**
@@ -241,7 +248,7 @@ public class Tuple extends AbstractList<Object> implements ErlangObject {
      * @return True if a bert object, false if otherwise.
      */
     public boolean isBertObject() {
-        return data.length > 0 && data[0] instanceof String &&  data[0].equals("bert");
+        return data.length > 0 && data[0] instanceof String && data[0].equals("bert");
     }
 
     @Override

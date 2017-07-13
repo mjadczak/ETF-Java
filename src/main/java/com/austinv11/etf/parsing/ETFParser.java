@@ -413,13 +413,13 @@ public class ETFParser {
      * @return The binary data.
      */
     @BertCompatible
-    public String nextBinary() {
+    public byte[] nextBinary() {
         checkPreconditions(BINARY_EXT);
 
         long len = Integer.toUnsignedLong(wrap(data, offset, 4).getInt());
         offset += 4;
 
-        return new String(Arrays.copyOfRange(data, offset, (offset += len)));
+        return Arrays.copyOfRange(data, offset, (offset += len));
     }
 
     /**
@@ -427,7 +427,7 @@ public class ETFParser {
      *
      * @return The binary data.
      */
-    public String nextBitBinary() {
+    public byte[] nextBitBinary() {
         checkPreconditions(BIT_BINARY_EXT);
 
         long len = Integer.toUnsignedLong(wrap(data, offset, 4).getInt());
@@ -445,7 +445,7 @@ public class ETFParser {
             bytes[i] = val;
         }
 
-        return new String(Arrays.copyOfRange(bytes, 0, (int) len));
+        return Arrays.copyOfRange(bytes, 0, (int) len);
     }
 
     /**
@@ -477,7 +477,7 @@ public class ETFParser {
         if (type == STRING_EXT) {
             return nextErlangString();
         } else if (type == BIT_BINARY_EXT) {
-            return nextBitBinary();
+            return new String(nextBitBinary());
         } else if (type == BINARY_EXT) {
             return new String(nextBinary());
         } else {

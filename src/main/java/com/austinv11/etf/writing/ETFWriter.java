@@ -47,7 +47,8 @@ public class ETFWriter {
 
     private void writeToBuffer(byte... data) {
         if (this.data.length - offset < data.length+1/*Ensure room for a version byte if necessary*/) { //We need to expand the buffer
-            this.data = Arrays.copyOf(this.data, this.data.length * 2);
+            int newLength = Math.max(this.data.length * 2, this.data.length - offset + data.length + 1);
+            this.data = Arrays.copyOf(this.data, newLength);
         }
 
         if (this.data[0] != version && !includeDistributionHeader) {
